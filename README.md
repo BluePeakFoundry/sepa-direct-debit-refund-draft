@@ -11,6 +11,8 @@ The page can help classify common timing routes:
 
 It does not send data anywhere, does not contact a bank, does not verify a real entitlement and is not legal or financial advice. Users should verify deadlines, scheme rules and local bank procedures before sending any request.
 
+The public page includes a canonical URL, basic social metadata, local JSON-LD SoftwareApplication/FAQPage markup, visible FAQ copy and accessible form help text. It remains static and does not load third-party runtime resources.
+
 ## Use
 
 Open `index.html` locally or visit the GitHub Pages site:

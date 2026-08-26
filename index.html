@@ -4,10 +4,48 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SEPA Direct Debit Refund Draft Helper</title>
-  <meta name="description" content="A private, in-browser helper for preparing an editable SEPA Direct Debit refund request draft.">
+  <meta name="description" content="A private in-browser SEPA Direct Debit refund helper that checks common eight-week and thirteen-month timing windows and prepares an editable bank request draft.">
+  <link rel="canonical" href="https://bluepeakfoundry.github.io/sepa-direct-debit-refund-draft/">
+  <meta property="og:title" content="SEPA Direct Debit Refund Draft Helper">
+  <meta property="og:description" content="Check common SEPA Direct Debit refund timing windows and prepare an editable request draft without uploading data.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://bluepeakfoundry.github.io/sepa-direct-debit-refund-draft/">
+  <meta name="twitter:card" content="summary">
   <link rel="stylesheet" href="style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "SEPA Direct Debit Refund Draft Helper",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Any modern browser",
+        "url": "https://bluepeakfoundry.github.io/sepa-direct-debit-refund-draft/",
+        "description": "A static browser helper for checking common SEPA Direct Debit refund timing windows and preparing an editable bank request draft.",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Does this page upload bank details?",
+            "acceptedAnswer": {"@type": "Answer", "text": "No. The helper is a static page that runs in the browser and has no server submission, tracking scripts or payment flow."}
+          },
+          {
+            "@type": "Question",
+            "name": "Is this legal or financial advice?",
+            "acceptedAnswer": {"@type": "Answer", "text": "No. It is an educational drafting aid. Users should verify current scheme rules, bank procedures and local requirements before sending any request."}
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
+  <a class="skip-link" href="#sepa-form">Skip to form</a>
   <main>
     <section class="hero">
       <p class="eyebrow">Private browser tool</p>
@@ -16,25 +54,38 @@
       <p class="notice">Educational helper only. It does not verify a real entitlement, contact a bank, store data or provide legal or financial advice. Always check your bank's process and current scheme rules before sending any request.</p>
     </section>
 
-    <form id="sepa-form">
-      <label>Bank name <input id="bank" value="Sample Bank" autocomplete="off"></label>
-      <label>Creditor <input id="creditor" value="Sample Subscription Ltd" autocomplete="off"></label>
-      <label>Amount EUR <input id="amount" type="number" step="0.01" min="0" value="89.90"></label>
-      <label>Debit date <input id="debitDate" type="date" value="2026-07-01"></label>
-      <label>Assessment date <input id="assessmentDate" type="date" value="2026-08-26"></label>
-      <label>Authorisation status
-        <select id="status">
+    <form id="sepa-form" aria-describedby="form-help">
+      <p id="form-help" class="form-help">Use fictitious or generalised details when testing. The generated text is editable and stays on this device.</p>
+      <label for="bank">Bank name</label>
+      <input id="bank" name="bank" value="Sample Bank" autocomplete="off" aria-describedby="bank-help">
+      <p id="bank-help" class="field-help">Name of the bank that collected or processed the debit.</p>
+
+      <label for="creditor">Creditor</label>
+      <input id="creditor" name="creditor" value="Sample Subscription Ltd" autocomplete="off" aria-describedby="creditor-help">
+      <p id="creditor-help" class="field-help">Company or organisation shown for the Direct Debit.</p>
+
+      <label for="amount">Amount EUR</label>
+      <input id="amount" name="amount" type="number" step="0.01" min="0" value="89.90" inputmode="decimal">
+
+      <label for="debitDate">Debit date</label>
+      <input id="debitDate" name="debitDate" type="date" value="2026-07-01">
+
+      <label for="assessmentDate">Assessment date</label>
+      <input id="assessmentDate" name="assessmentDate" type="date" value="2026-08-26">
+
+      <label for="status">Authorisation status</label>
+      <select id="status" name="status">
           <option value="authorized">Authorised / mandate known</option>
           <option value="unauthorized">Unauthorised / no mandate</option>
           <option value="unknown">Unknown</option>
-        </select>
-      </label>
-      <label class="check"><input id="mandate" type="checkbox" checked> Mandate or reference available</label>
-      <label class="check"><input id="notice" type="checkbox"> Prior notice or invoice available</label>
+      </select>
+
+      <label class="check" for="mandate"><input id="mandate" name="mandate" type="checkbox" checked> Mandate or reference available</label>
+      <label class="check" for="notice"><input id="notice" name="notice" type="checkbox"> Prior notice or invoice available</label>
       <button type="submit">Generate local draft</button>
     </form>
 
-    <section class="output" aria-live="polite">
+    <section class="output" aria-live="polite" aria-atomic="true">
       <h2>Assessment</h2>
       <pre id="result"></pre>
       <h2>Editable draft</h2>
@@ -49,6 +100,18 @@
         <li>Which evidence to check before contacting a bank.</li>
       </ul>
       <p>No personal data is sent to Blue Peak Foundry or any third party by this static page.</p>
+    </section>
+
+    <section class="faq">
+      <h2>FAQ</h2>
+      <details>
+        <summary>Does this page upload bank details?</summary>
+        <p>No. The helper runs locally in your browser and has no server submission, tracking scripts, external scripts or payment flow.</p>
+      </details>
+      <details>
+        <summary>Is this legal or financial advice?</summary>
+        <p>No. It is an educational drafting aid. Verify current scheme rules, bank procedures and local requirements before sending any request.</p>
+      </details>
     </section>
   </main>
   <script src="app.js"></script>

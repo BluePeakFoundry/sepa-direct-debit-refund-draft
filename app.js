@@ -3,6 +3,7 @@ const unauthorisedDays = 395;
 
 function daysBetween(start, end) {
   const ms = Date.parse(end) - Date.parse(start);
+  if (!Number.isFinite(ms)) return NaN;
   return Math.floor(ms / 86400000);
 }
 
@@ -10,9 +11,11 @@ function assess(data) {
   const days = daysBetween(data.debitDate, data.assessmentDate);
   const missing = [];
   const warnings = [];
+  if (!Number.isFinite(days)) warnings.push('debit date and assessment date are required');
+  if (!Number.isFinite(Number(data.amount)) || Number(data.amount) <= 0) warnings.push('amount should be greater than zero');
   if (!data.mandate) missing.push('mandate/reference or authorisation record');
   if (!data.notice) missing.push('prior notice or invoice');
-  if (days < 0) warnings.push('assessment date is before debit date');
+  if (Number.isFinite(days) && days < 0) warnings.push('assessment date is before debit date');
 
   let route = 'authorisation unknown';
   let window = 'outside standard windows';
@@ -50,11 +53,12 @@ function assess(data) {
 }
 
 function draft(data, assessment) {
-  return `To: ${data.bank}\nSubject: SEPA Direct Debit refund request for ${data.creditor}\n\nPlease review the SEPA Direct Debit collected by ${data.creditor} on ${data.debitDate} for ${Number(data.amount).toFixed(2)} EUR.\n\nCurrent classification: ${assessment.route}; timing: ${assessment.window} (${assessment.days} days since debit).\n\nRequested action: ${assessment.action}\n\nEvidence to check or attach: bank statement, mandate/reference, creditor notice or invoice, and communication with the creditor. Missing or uncertain evidence flagged by this draft: ${assessment.missing.join(', ') || 'none currently flagged'}.\n\nThis is an editable draft based on general public information. Please verify applicable scheme, local banking rules and deadlines before sending.\n`;
+  const amount = Number.isFinite(Number(data.amount)) ? Number(data.amount).toFixed(2) : '[amount]';
+  const daysText = Number.isFinite(assessment.days) ? `${assessment.days} days since debit` : 'date information incomplete';
+  return `To: ${data.bank || '[bank name]'}\nSubject: SEPA Direct Debit refund request for ${data.creditor || '[creditor]'}\n\nPlease review the SEPA Direct Debit collected by ${data.creditor || '[creditor]'} on ${data.debitDate || '[debit date]'} for ${amount} EUR.\n\nCurrent classification: ${assessment.route}; timing: ${assessment.window} (${daysText}).\n\nRequested action: ${assessment.action}\n\nEvidence to check or attach: bank statement, mandate/reference, creditor notice or invoice, and communication with the creditor. Missing or uncertain evidence flagged by this draft: ${assessment.missing.join(', ') || 'none currently flagged'}.\n\nThis is an editable draft based on general public information. Please verify applicable scheme, local banking rules and deadlines before sending.\n`;
 }
 
-document.getElementById('sepa-form').addEventListener('submit', (event) => {
-  event.preventDefault();
+function render() {
   const data = {
     bank: document.getElementById('bank').value,
     creditor: document.getElementById('creditor').value,
@@ -75,6 +79,12 @@ document.getElementById('sepa-form').addEventListener('submit', (event) => {
     warnings: assessment.warnings,
   }, null, 2);
   document.getElementById('draft').value = draft(data, assessment);
+}
+
+document.getElementById('sepa-form').addEventListener('submit', (event) => {
+  event.preventDefault();
+  render();
 });
 
-document.getElementById('sepa-form').dispatchEvent(new Event('submit'));
+document.getElementById('sepa-form').addEventListener('input', render);
+render();
