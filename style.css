@@ -17,6 +17,7 @@ label { display: grid; gap: 6px; font-weight: 650; }
 input, select, textarea, button { font: inherit; border: 1px solid #cfd6e4; border-radius: 10px; padding: 10px; }
 button { background: #193c8f; color: white; border: 0; cursor: pointer; font-weight: 750; min-height: 44px; }
 button:hover { background: #102b6a; }
+.tools-link { color: #193c8f; font-weight: 750; }
 input:focus, select:focus, textarea:focus, button:focus-visible, summary:focus-visible { outline: 3px solid #7aa2ff; outline-offset: 2px; }
 pre, textarea { width: 100%; background: #111827; color: #e5e7eb; border-radius: 12px; padding: 14px; white-space: pre-wrap; }
 details { border-top: 1px solid #e2e8f0; padding: 12px 0; }
@@ -27,6 +28,7 @@ li { margin: 6px 0; }
   .hero, .notes, .faq, form, .output { background: #172033; border-color: #29374d; }
   .notice { background: #473900; color: #fff6d8; }
   .eyebrow { color: #9bb8ff; }
+  .tools-link { color: #9bb8ff; }
   .field-help { color: #bac6d8; }
   input, select, textarea { background: #111827; color: #f9fafb; border-color: #46546a; }
   details { border-color: #29374d; }
