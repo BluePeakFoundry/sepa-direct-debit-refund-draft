@@ -21,7 +21,7 @@ https://bluepeakfoundry.github.io/sepa-direct-debit-refund-draft/
 
 ## Privacy
 
-This is a static page. It has no tracking, no external scripts, no server submission and no payment flow.
+This is a static page. It has no cookies, no account requirement, no server submission and no payment flow. Aggregate usage analytics measure visits and non-personal events.
 
 ## Validation
 

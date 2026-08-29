@@ -31,7 +31,7 @@
           {
             "@type": "Question",
             "name": "Does this page upload bank details?",
-            "acceptedAnswer": {"@type": "Answer", "text": "No. The helper is a static page that runs in the browser and has no server submission, tracking scripts or payment flow."}
+            "acceptedAnswer": {"@type": "Answer", "text": "No. The helper is a static page that runs in the browser and has no server submission, no cookies, no account requirement and no payment flow."}
           },
           {
             "@type": "Question",
@@ -43,6 +43,8 @@
     ]
   }
   </script>
+  <script data-goatcounter="https://bluepeakfoundry.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+  <script defer src="analytics.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#sepa-form">Skip to form</a>
@@ -54,7 +56,7 @@
       <p class="notice">Educational helper only. It does not verify a real entitlement, contact a bank, store data or provide legal or financial advice. Always check your bank's process and current scheme rules before sending any request.</p>
     </section>
 
-    <form id="sepa-form" aria-describedby="form-help">
+    <form id="sepa-form" aria-describedby="form-help" data-analytics-submit="conversion:sepa:generate-draft" aria-label="SEPA draft generator">
       <p id="form-help" class="form-help">Use fictitious or generalised details when testing. The generated text is editable and stays on this device.</p>
       <label for="bank">Bank name</label>
       <input id="bank" name="bank" value="Sample Bank" autocomplete="off" aria-describedby="bank-help">
@@ -82,7 +84,7 @@
 
       <label class="check" for="mandate"><input id="mandate" name="mandate" type="checkbox" checked> Mandate or reference available</label>
       <label class="check" for="notice"><input id="notice" name="notice" type="checkbox"> Prior notice or invoice available</label>
-      <button type="submit">Generate local draft</button>
+      <button type="submit" data-analytics-event="cta:sepa:generate-draft" data-analytics-title="SEPA generate draft CTA">Generate local draft</button>
     </form>
 
     <section class="output" aria-live="polite" aria-atomic="true">
@@ -90,6 +92,7 @@
       <pre id="result"></pre>
       <h2>Editable draft</h2>
       <textarea id="draft" rows="16" spellcheck="true"></textarea>
+      <button id="download-draft" type="button" data-analytics-event="download:sepa:draft-text" data-analytics-title="SEPA draft text download">Download draft .txt</button>
     </section>
 
     <section class="notes">
@@ -100,14 +103,14 @@
         <li>Which evidence to check before contacting a bank.</li>
       </ul>
       <p>No personal data is sent to Blue Peak Foundry or any third party by this static page.</p>
-      <p><a class="tools-link" href="https://bluepeakfoundry.github.io/consumer-rights-tools/">Browse more EU consumer rights tools</a></p>
+      <p><a class="tools-link" href="https://bluepeakfoundry.github.io/consumer-rights-tools/" data-analytics-event="outbound:sepa:consumer-rights-tools" data-analytics-title="SEPA outbound to tools index">Browse more EU consumer rights tools</a></p>
     </section>
 
     <section class="faq">
       <h2>FAQ</h2>
       <details>
         <summary>Does this page upload bank details?</summary>
-        <p>No. The helper runs locally in your browser and has no server submission, tracking scripts, external scripts or payment flow.</p>
+        <p>No. The helper runs locally in your browser and has no server submission, no cookies, no account requirement and no payment flow.</p>
       </details>
       <details>
         <summary>Is this legal or financial advice?</summary>

@@ -84,7 +84,23 @@ function render() {
 document.getElementById('sepa-form').addEventListener('submit', (event) => {
   event.preventDefault();
   render();
+  if (window.BluePeakAnalytics) window.BluePeakAnalytics.track('conversion:sepa:draft-complete', 'SEPA draft generated');
 });
 
 document.getElementById('sepa-form').addEventListener('input', render);
 render();
+
+
+function downloadSepaDraft() {
+  const text = document.getElementById('draft').value || '';
+  const blob = new Blob([text], {type: 'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'sepa-direct-debit-refund-draft.txt';
+  link.click();
+  URL.revokeObjectURL(url);
+  if (window.BluePeakAnalytics) window.BluePeakAnalytics.track('conversion:sepa:download-draft', 'SEPA draft downloaded');
+}
+
+document.getElementById('download-draft').addEventListener('click', downloadSepaDraft);

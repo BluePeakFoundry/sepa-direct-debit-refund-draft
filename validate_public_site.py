@@ -6,9 +6,9 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-REQUIRED = ["index.html", "app.js", "style.css", "README.md", "LICENSE", "robots.txt", "sitemap.xml"]
+REQUIRED = ["index.html", "app.js", "analytics.js", "style.css", "README.md", "LICENSE", "robots.txt", "sitemap.xml"]
 FORBIDDEN = ["Sergi", "Rex", r"\bagent\b", r"\bbot\b", "money generated", "money verified", "monetization", "cycle"]
-REMOTE_RESOURCE_RE = re.compile(r"<(script|img|iframe)\b[^>]*src=\"https?://|<form\b[^>]*action=", re.I)
+REMOTE_RESOURCE_RE = re.compile(r"<(script|img|iframe)\b[^>]*src=\"https?://(?!gc\.zgo\.at/count\.js)|<form\b[^>]*action=", re.I)
 CANONICAL = "https://bluepeakfoundry.github.io/sepa-direct-debit-refund-draft/"
 
 
@@ -49,14 +49,16 @@ def main() -> int:
         "nothing is uploaded",
         "does not verify a real entitlement",
         "not legal or financial advice",
-        "no tracking",
-        "no external scripts",
+        "no cookies",
         "eight-week",
         "thirteen-month",
     ]
     missing_phrases = [phrase for phrase in required_phrases if phrase.lower() not in public_text.lower()]
     if missing_phrases:
         raise SystemExit(f"missing expected public safeguards: {missing_phrases}")
+    for marker in ["bluepeakfoundry.goatcounter.com/count", "analytics.js", "data-analytics-event", "data-analytics-submit"]:
+        if marker not in public_text:
+            raise SystemExit(f"missing analytics marker: {marker}")
     if "money_verified" in public_text or "external_actions" in public_text:
         raise SystemExit("internal accounting fields leaked into public copy")
     print("OK public site files=7 no_remote_runtime_resources privacy_safeguards_present seo_accessibility_present")
